@@ -1,0 +1,15 @@
+{
+	"name"       : "cftp/wp-ajax-search-widget",
+	"description": "Search your WordPress site using this inline ajax search widget",
+	"type"       : "wordpress-plugin",
+	"license"    : "GPL-2.0+",
+	"authors"    : [
+		{
+			"name"    : "Code For The People",
+			"homepage": "http://codeforthepeople.com/"
+		}
+	],
+	"require": {
+		"composer/installers": "~1.0"
+	}
+}
