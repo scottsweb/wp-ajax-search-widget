@@ -65,8 +65,8 @@ class wpasw_widget extends WP_Widget {
 		add_action( 'init', array( $this, 'wpasw_register_script' ) ) ;
 		add_action( 'wp_footer', array( $this, 'wpasw_print_script' ) );
 
-		add_action('wp_ajax_wpasw', array( $this, 'ajax') );
-		add_action('wp_ajax_nopriv_wpasw', array( $this, 'ajax') );
+		add_action('wp_ajax_wpasw', array( $this, 'wpasw_ajax') );
+		add_action('wp_ajax_nopriv_wpasw', array( $this, 'wpasw_ajax') );
 
 	}
 
@@ -153,7 +153,7 @@ class wpasw_widget extends WP_Widget {
 	 * 
 	 * @return string
 	 */
-	function ajax() {
+	function wpasw_ajax() {
 				
 		// verify the nonce
 		if (wp_verify_nonce($_REQUEST['_wpnonce'], 'wpasw')) {
@@ -161,31 +161,52 @@ class wpasw_widget extends WP_Widget {
 			// clean up the query
 			$s = trim(stripslashes($_POST['s']));
 
+			// cancel if no search term is set
+			if ( !$s ) die();
+
 			// get the settings for this widget instance
 			$instance = $this->get_settings();
 			if ( array_key_exists( $this->number, $instance ) ) {
 				$instance = $instance[$this->number];
 			}
 
+			// slowly
+			sleep(1);
+
 			// set the query limit
 			$limit = empty($instance['number']) ? 10: $instance['number'];
 		
 			$query_args = array('s' => $s, 'post_status' => 'publish', 'posts_per_page' => $limit );
 
-			$query = new WP_Query($query_args);
+			$search = new WP_Query($query_args);
 
-			if ( $query->have_posts() ) : 
-				?><ul><?php
-				while ( $query->have_posts() ) : $query->the_post();
-					// should check for template part here
-					?>
-					<li <?php post_class(); ?>>
-						<h5><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h5>
-						<span class="entry-date"><?php the_date(); ?></span>
-					</li>
-					<?php
+			if ( $search->have_posts() ) : 
+
+				?><ul class="wpasw-result-list"><?php
+				while ( $search->have_posts() ) : $search->the_post();
+										
+					if ( locate_template('parts/widget-ajax-search-result.php') != '' ) {
+						get_template_part( 'parts/widget-ajax-search-result' );
+					} else {
+						?>
+						<li <?php post_class(); ?>>
+							<h5 class="entry-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h5>
+							<div class="entry-date"><time class="published" datetime="<?php the_time('Y-m-d\TH:i:s') ?>"><?php the_date(); ?></time></div>
+						</li>
+						<?php
+					}
 				endwhile;
 				?></ul><?php
+
+			else: 
+
+				// no results
+				if ( locate_template('parts/widget-ajax-search-fail.php') != '' ) {
+					get_template_part( 'parts/widget-ajax-search-fail' );
+				} else {
+					?><div class="alert alert-info"><?php _e('No results found.', 'wpasw'); ?></div><?php	
+				}
+
 			endif;
 
 			wp_reset_postdata();
