@@ -2,7 +2,7 @@ jQuery(document).ready(function($) {
 	
 	var wpaswxhr;
 	var $form;
-	var $button;
+	var $button = null;
 	var buttontype;
 	var buttoncontent;
 	var wpaswcount = 1;
@@ -24,20 +24,23 @@ jQuery(document).ready(function($) {
 			data: jQuery(this).serialize(),
 			success: function(data) {
 				
-				clearInterval(wpaswcounter);
-
-				wpaswupdatebutton(buttoncontent);
+				if ($button.length) {
+					wpaswupdatebutton(buttoncontent);
+					clearInterval(wpaswcounter);
+				}
 
 				$results.html(data);
 			},
 			beforeSend: function() {
 				
 				$button = $form.find('.search-submit');
-				buttontype = $button.prop("tagName").toLowerCase();
-				buttoncontent =  wpaswgetbutton();
 				
-				wpaswupdatebutton('...');
-				wpaswcounter = setInterval(wpaswloading, 333);
+				if ($button.length) {
+					buttontype = $button.prop("tagName").toLowerCase();
+					buttoncontent =  wpaswgetbutton();
+					wpaswupdatebutton('...');
+					wpaswcounter = setInterval(wpaswloading, 333);
+				}
 			}
 		});
 		
