@@ -56,14 +56,15 @@ add_action('widgets_init', 'wpasw_widget');
 
 class wpasw_widget extends WP_Widget {
 	
-	static $load_script;
-
 	function wpasw_widget() {
 		$widget_ops = array( 'classname' => 'wpasw-widget', 'description' => __('Search form with AJAX results', 'wpasw') );
 		$this->WP_Widget( 'wpasw-widget', __('AJAX Search', 'wpasw'), $widget_ops );	
 
 		add_action( 'init', array( $this, 'wpasw_register_script' ) ) ;
-		add_action( 'wp_footer', array( $this, 'wpasw_print_script' ) );
+
+		// only load scripts when an instance is active
+		if ( is_active_widget( false, false, $this->id_base ) && !is_admin()) 
+			add_action( 'wp_footer', array( $this, 'wpasw_print_script' ) );
 
 		add_action('wp_ajax_wpasw', array( $this, 'wpasw_ajax') );
 		add_action('wp_ajax_nopriv_wpasw', array( $this, 'wpasw_ajax') );
@@ -77,8 +78,6 @@ class wpasw_widget extends WP_Widget {
 		$title = empty($instance['title']) ? '' : apply_filters('widget_title', $instance['title']);	
 		$username = empty($instance['username']) ? '' : $instance['username'];
 		$limit = empty($instance['number']) ? 10 : $instance['number'];
-
-		self::$load_script = true;
 
 		echo $before_widget;
 		if (!empty($title)) { echo $before_title . $title . $after_title; };
@@ -138,11 +137,6 @@ class wpasw_widget extends WP_Widget {
 	 * @return void
 	 */
 	function wpasw_print_script() {
-		
-		// only load the script if widget is in use
-		if ( ! self::$load_script )
-			return;
-
 		wp_print_scripts( 'wpasw' );
 	}
 
