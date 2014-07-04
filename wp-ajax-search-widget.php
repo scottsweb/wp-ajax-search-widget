@@ -170,7 +170,7 @@ class wpasw_widget extends WP_Widget {
 			// set the query limit
 			$limit = empty($instance['number']) ? 10: $instance['number'];
 
-			$query_args = array('s' => $s, 'post_status' => 'publish', 'posts_per_page' => $limit );
+			$query_args = apply_filters( 'wpasw_query', array('s' => $s, 'post_status' => 'publish', 'posts_per_page' => $limit ) );
 
 			$search = new WP_Query($query_args);
 
@@ -190,6 +190,9 @@ class wpasw_widget extends WP_Widget {
 						<?php
 					}
 				endwhile;
+
+				// link to more?
+
 				?></ul><?php
 
 			else:
