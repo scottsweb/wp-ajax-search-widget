@@ -56,6 +56,13 @@ add_action('widgets_init', 'wpasw_widget');
 
 class wpasw_widget extends WP_Widget {
 
+	/**
+	 * wpasw_widet
+	 *
+	 * Setup the widget, register scripts etc
+	 *
+	 * @return void
+	 */
 	function wpasw_widget() {
 		$widget_ops = array( 'classname' => 'wpasw-widget', 'description' => __('Search form with AJAX results', 'wpasw') );
 		$this->WP_Widget( 'wpasw-widget', __('AJAX Search', 'wpasw'), $widget_ops );
@@ -71,6 +78,13 @@ class wpasw_widget extends WP_Widget {
 
 	}
 
+	/**
+	 * widget
+	 *
+	 * Output the widget
+	 *
+	 * @return void
+	 */
 	function widget($args, $instance) {
 
 		extract($args, EXTR_SKIP);
@@ -92,6 +106,13 @@ class wpasw_widget extends WP_Widget {
 		echo $after_widget;
 	}
 
+	/**
+	 * form
+	 *
+	 * Edit widget form
+	 *
+	 * @return void
+	 */
 	function form($instance) {
 		$instance = wp_parse_args( (array) $instance, array( 'title' => __('Search', 'wpasw'), 'number' => 10 ) );
 		$title = esc_attr($instance['title']);
@@ -110,7 +131,13 @@ class wpasw_widget extends WP_Widget {
 		<?php
 
 	}
-
+	/**
+	 * update
+	 *
+	 * Save the new widget instance
+	 *
+	 * @return array
+	 */
 	function update($new_instance, $old_instance) {
 		$instance = $old_instance;
 		$instance['title'] = strip_tags($new_instance['title']);
@@ -154,7 +181,7 @@ class wpasw_widget extends WP_Widget {
 	function wpasw_ajax() {
 
 		// verify the nonce
-		if (wp_verify_nonce($_REQUEST['_wpnonce'], 'wpasw')) {
+		if ( wp_verify_nonce($_REQUEST['_wpnonce'], 'wpasw') ) {
 
 			// clean up the query
 			$s = trim(stripslashes($_POST['s']));
