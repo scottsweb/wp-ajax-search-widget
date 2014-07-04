@@ -1,5 +1,5 @@
 jQuery(document).ready(function($) {
-	
+
 	var wpaswxhr;
 	var $form;
 	var $button = null;
@@ -9,9 +9,9 @@ jQuery(document).ready(function($) {
 	var wpaswcounter;
 
 	jQuery('.wpasw-widget form').on('submit', function(e) {
-		
+
 		e.preventDefault();
-		
+
 		var $results = jQuery(this).parent().find('.wpasw-results');
 		$form = jQuery(this);
 
@@ -23,7 +23,7 @@ jQuery(document).ready(function($) {
 			url: wpasw.ajax_url,
 			data: jQuery(this).serialize(),
 			success: function(data) {
-				
+
 				if ($button.length) {
 					wpaswupdatebutton(buttoncontent);
 					clearInterval(wpaswcounter);
@@ -32,9 +32,9 @@ jQuery(document).ready(function($) {
 				$results.html(data);
 			},
 			beforeSend: function() {
-				
+
 				$button = $form.find('.search-submit');
-				
+
 				if ($button.length) {
 					buttontype = $button.prop("tagName").toLowerCase();
 					buttoncontent =  wpaswgetbutton();
@@ -43,7 +43,7 @@ jQuery(document).ready(function($) {
 				}
 			}
 		});
-		
+
 		return false;
 	});
 
@@ -54,7 +54,7 @@ jQuery(document).ready(function($) {
 		} else {
 			wpaswupdatebutton( wpaswgetbutton() + '.' );
 		}
-		
+
 		wpaswcount++;
 		if (wpaswcount == 4) wpaswcount = 0;
 	}
@@ -72,6 +72,6 @@ jQuery(document).ready(function($) {
 			return $button.html();
 		} else {
 			return $button.val();
-		}	
+		}
 	}
 });

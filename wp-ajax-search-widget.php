@@ -1,10 +1,10 @@
 <?php
-/*	
+/*
 Plugin Name: WP Ajax Search Widget
 Plugin URI: https://github.com/cftp/wp-ajax-search-widget
 Description: Search your WordPress site using this inline ajax search widget
 Version: 1.0
-Author: Code For The People
+Author: Scott Evans (Code For The People)
 Author URI: http://codeforthepeople.com
 Text Domain: wpasw
 Domain Path: /assets/languages/
@@ -41,12 +41,12 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 */
-	
+
 /**
  * wpasw_widget
  *
  * Register the widget
- * 
+ *
  * @return void
  */
 function wpasw_widget() {
@@ -55,15 +55,15 @@ function wpasw_widget() {
 add_action('widgets_init', 'wpasw_widget');
 
 class wpasw_widget extends WP_Widget {
-	
+
 	function wpasw_widget() {
 		$widget_ops = array( 'classname' => 'wpasw-widget', 'description' => __('Search form with AJAX results', 'wpasw') );
-		$this->WP_Widget( 'wpasw-widget', __('AJAX Search', 'wpasw'), $widget_ops );	
+		$this->WP_Widget( 'wpasw-widget', __('AJAX Search', 'wpasw'), $widget_ops );
 
 		add_action( 'init', array( $this, 'wpasw_register_script' ) ) ;
 
 		// only load scripts when an instance is active
-		if ( is_active_widget( false, false, $this->id_base ) && !is_admin()) 
+		if ( is_active_widget( false, false, $this->id_base ) && !is_admin())
 			add_action( 'wp_footer', array( $this, 'wpasw_print_script' ) );
 
 		add_action('wp_ajax_wpasw', array( $this, 'wpasw_ajax') );
@@ -72,20 +72,20 @@ class wpasw_widget extends WP_Widget {
 	}
 
 	function widget($args, $instance) {
-		
+
 		extract($args, EXTR_SKIP);
-		
-		$title = empty($instance['title']) ? '' : apply_filters('widget_title', $instance['title']);	
+
+		$title = empty($instance['title']) ? '' : apply_filters('widget_title', $instance['title']);
 		$username = empty($instance['username']) ? '' : $instance['username'];
 		$limit = empty($instance['number']) ? 10 : $instance['number'];
 
 		echo $before_widget;
 		if (!empty($title)) { echo $before_title . $title . $after_title; };
-		
+
 			get_search_form( true );
 			?><div class="wpasw-results"></div><?php
 
-		echo $after_widget; 
+		echo $after_widget;
 	}
 
 	function form($instance) {
@@ -118,14 +118,14 @@ class wpasw_widget extends WP_Widget {
 	 * wpasw_register_script
 	 *
 	 * Register the JS for ajax request
-	 * 
+	 *
 	 * @return void
 	 */
 	function wpasw_register_script() {
 		wp_register_script( 'wpasw', plugins_url('/assets/js/wpasw.js', __FILE__), array('jquery'), '1.0', true);
 
 		wp_localize_script('wpasw','wpasw', array(
-			'ajax_url' => add_query_arg(array('action' => 'wpasw','_wpnonce' => wp_create_nonce( 'wpasw' )), untrailingslashit(admin_url('admin-ajax.php'))),  
+			'ajax_url' => add_query_arg(array('action' => 'wpasw','_wpnonce' => wp_create_nonce( 'wpasw' )), untrailingslashit(admin_url('admin-ajax.php'))),
 		));
 	}
 
@@ -133,7 +133,7 @@ class wpasw_widget extends WP_Widget {
 	 * wpasw_print_script
 	 *
 	 * Output JS only when widget in use on page
-	 * 
+	 *
 	 * @return void
 	 */
 	function wpasw_print_script() {
@@ -144,14 +144,14 @@ class wpasw_widget extends WP_Widget {
 	 * ajax
 	 *
 	 * Handle the search request
-	 * 
+	 *
 	 * @return string
 	 */
 	function wpasw_ajax() {
-				
+
 		// verify the nonce
 		if (wp_verify_nonce($_REQUEST['_wpnonce'], 'wpasw')) {
-			
+
 			// clean up the query
 			$s = trim(stripslashes($_POST['s']));
 
@@ -169,16 +169,16 @@ class wpasw_widget extends WP_Widget {
 
 			// set the query limit
 			$limit = empty($instance['number']) ? 10: $instance['number'];
-		
+
 			$query_args = array('s' => $s, 'post_status' => 'publish', 'posts_per_page' => $limit );
 
 			$search = new WP_Query($query_args);
 
-			if ( $search->have_posts() ) : 
+			if ( $search->have_posts() ) :
 
 				?><ul class="wpasw-result-list"><?php
 				while ( $search->have_posts() ) : $search->the_post();
-										
+
 					if ( locate_template('parts/widget-ajax-search-result.php') != '' ) {
 						get_template_part( 'parts/widget-ajax-search-result' );
 					} else {
@@ -192,13 +192,13 @@ class wpasw_widget extends WP_Widget {
 				endwhile;
 				?></ul><?php
 
-			else: 
+			else:
 
 				// no results
 				if ( locate_template('parts/widget-ajax-search-fail.php') != '' ) {
 					get_template_part( 'parts/widget-ajax-search-fail' );
 				} else {
-					?><div class="alert alert-info"><?php _e('No results found.', 'wpasw'); ?></div><?php	
+					?><div class="alert alert-info"><?php _e('No results found.', 'wpasw'); ?></div><?php
 				}
 
 			endif;
@@ -206,7 +206,7 @@ class wpasw_widget extends WP_Widget {
 			wp_reset_postdata();
 		}
 
-		die();		
+		die();
 	}
 }
 
