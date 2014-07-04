@@ -82,8 +82,12 @@ class wpasw_widget extends WP_Widget {
 		echo $before_widget;
 		if (!empty($title)) { echo $before_title . $title . $after_title; };
 
+			do_action( 'wpasw_before_widget' );
+
 			get_search_form( true );
 			?><div class="wpasw-results"></div><?php
+
+			do_action( 'wpasw_after_widget' );
 
 		echo $after_widget;
 	}
@@ -167,6 +171,8 @@ class wpasw_widget extends WP_Widget {
 			// slowly
 			sleep(1);
 
+			do_action( 'wpasw_before_results' );
+
 			// set the query limit
 			$limit = empty($instance['number']) ? 10: $instance['number'];
 
@@ -192,6 +198,16 @@ class wpasw_widget extends WP_Widget {
 				endwhile;
 
 				// link to more?
+				if ($search->max_num_pages > 1) {
+
+					if ( locate_template('parts/widget-ajax-search-more.php') != '' ) {
+						get_template_part( 'parts/widget-ajax-search-more' );
+					} else {
+						?>
+						<li class="wpasw-more-link"><a href="<?php echo add_query_arg(array( 's' => $s ), home_url() ); ?>"><?php _e( 'View all search results &hellip;', 'wpasw'); ?></a></li>
+						<?php
+					}
+				}
 
 				?></ul><?php
 
@@ -207,6 +223,8 @@ class wpasw_widget extends WP_Widget {
 			endif;
 
 			wp_reset_postdata();
+
+			do_action( 'wpasw_after_results' );
 		}
 
 		die();
