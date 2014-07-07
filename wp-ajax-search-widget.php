@@ -96,12 +96,12 @@ class wpasw_widget extends WP_Widget {
 		echo $before_widget;
 		if (!empty($title)) { echo $before_title . $title . $after_title; };
 
-			do_action( 'wpasw_before_widget' );
+			do_action( 'wpasw_before_widget', $instance );
 
 			get_search_form( true );
 			?><div class="wpasw-results"></div><?php
 
-			do_action( 'wpasw_after_widget' );
+			do_action( 'wpasw_after_widget', $instance );
 
 		echo $after_widget;
 	}
