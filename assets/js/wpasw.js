@@ -33,7 +33,7 @@ jQuery(document).ready(function($) {
 			},
 			beforeSend: function() {
 
-				$button = $form.find('.search-submit');
+				$button = $form.find(':submit');
 
 				if ($button.length) {
 					buttontype = $button.prop("tagName").toLowerCase();
