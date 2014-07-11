@@ -156,7 +156,7 @@ class wpasw_widget extends WP_Widget {
 		wp_register_script( 'wpasw', plugins_url('/assets/js/wpasw.js', __FILE__), array('jquery'), '1.0', true);
 
 		wp_localize_script('wpasw','wpasw', array(
-			'ajax_url' => add_query_arg(array('action' => 'wpasw','_wpnonce' => wp_create_nonce( 'wpasw' )), untrailingslashit(admin_url('admin-ajax.php'))),
+			'ajax_url' => add_query_arg(array('action' => 'wpasw','_wpnonce' => wp_create_nonce( 'wpasw' )), untrailingslashit(set_url_scheme(admin_url('admin-ajax.php')))),
 		));
 	}
 
