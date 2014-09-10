@@ -118,8 +118,8 @@ class wpasw_widget extends WP_Widget {
 		$title = esc_attr($instance['title']);
 		$number = absint($instance['number']);
 		?>
-		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'wpasw'); ?>: <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></label></p>
-		<p><label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Results Limit', 'wpasw'); ?>:</label>
+		<p class="wpasw-title"><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'wpasw'); ?>: <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></label></p>
+		<p class="wpasw-result-limit"><label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Results Limit', 'wpasw'); ?>:</label>
 			<select id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" class="widefat">
 				<option value="-1" <?php selected('-1', $number) ?>><?php _e('All', 'wpasw'); ?></option>
 				<option value="5" <?php selected('5', $number) ?>><?php _e('5', 'wpasw'); ?></option>
