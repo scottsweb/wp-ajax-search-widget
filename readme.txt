@@ -2,7 +2,7 @@
 Contributors: scottsweb, codeforthepeople
 Tags: search, ajax, instant, results, widget, form, searching, quick, sidebar, filter, action, extensible
 Requires at least: 3.8
-Tested up to: 4.0
+Tested up to: 4.3
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -14,6 +14,8 @@ Displays instant search results directly beneath a search widget.
 WP Ajax Search Widget is a replacement for the standard search widget but instead of redirecting you to a new search page the results are returned underneath the search input with an option to click through to the standard results page.
 
 The widget allows you to choose how many results to show.
+
+[a plugin by Scott Evans](http://scott.ee/ "WordPress designer and developer")
 
 == Installation ==
 
@@ -53,6 +55,10 @@ By placing the following template parts within a /parts/ folder in your theme yo
 1. Search results.
 
 == Changelog ==
+
+= 1.1 =
+* Performance improvements
+* Code standards and formatting
 
 = 1.0 =
 * Initial release
