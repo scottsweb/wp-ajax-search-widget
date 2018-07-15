@@ -1,4 +1,4 @@
-![WP Ajax Search Widget](http://cloud.scott.ee/images/wp-ajax-search-widget.png)
+![WP Ajax Search Widget](https://scott.ee/images/wp-ajax-search-widget.png)
 
 # WP Ajax Search Widget
 
